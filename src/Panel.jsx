@@ -8,9 +8,9 @@ import classNames from 'classnames';
 function noop() {
 }
 
-function generateOptions(length, disabledOptions, hideDisabledOptions, step = 1) {
+function generateOptions(length, disabledOptions, hideDisabledOptions, step = 1, start = 0) {
   const arr = [];
-  for (let value = 0; value < length; value += step) {
+  for (let value = start; value < length; value += step) {
     if (!disabledOptions || disabledOptions.indexOf(value) < 0 || !hideDisabledOptions) {
       arr.push(value);
     }
@@ -47,6 +47,7 @@ class Panel extends Component {
     focusOnOpen: PropTypes.bool,
     onKeyDown: PropTypes.func,
     clearIcon: PropTypes.node,
+    hourStart: PropTypes.number,
   };
 
   static defaultProps = {
@@ -118,6 +119,7 @@ class Panel extends Component {
       disabledSeconds, hideDisabledOptions, allowEmpty, showHour, showMinute, showSecond,
       format, defaultOpenValue, clearText, onEsc, addon, use12Hours, onClear,
       focusOnOpen, onKeyDown, hourStep, minuteStep, secondStep, inputReadOnly, clearIcon,
+      hourStart,
     } = this.props;
     const {
       value, currentSelectPanel,
@@ -127,7 +129,7 @@ class Panel extends Component {
     const disabledSecondOptions = disabledSeconds(value ? value.hour() : null,
       value ? value.minute() : null);
     const hourOptions = generateOptions(
-      24, disabledHourOptions, hideDisabledOptions, hourStep
+      24, disabledHourOptions, hideDisabledOptions, hourStep, hourStart
     );
     const minuteOptions = generateOptions(
       60, disabledMinuteOptions, hideDisabledOptions, minuteStep
